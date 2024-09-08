@@ -1,0 +1,13 @@
+.contenedorRegistro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-blanco);
+  padding: 50px;
+  border-radius: 20px;
+  margin-top: 170px;
+}
+.titulo {
+  font-size: x-large;
+  color: var(--color-primario);
+}
