@@ -7,11 +7,10 @@ const PublicLayout = lazy(() => import("./layout/public/Public"));
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-
       <Route path="/tasks" element={<TaskList />} />
       <Route path="/public" element={<PublicLayout />}>
         <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
       </Route>
     </Routes>
   );
