@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Card from "../../../components/Card/views/Card";
 import Table from "../../../components/Table/Table";
+import classes from "./TaskList.module.css";
+
+const { contenedor } = classes;
 const TaskList = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
@@ -175,12 +179,29 @@ const TaskList = () => {
     setTasks([]);
     navigate("/login");
   };
+  const headers = [
+    { name: "Título" },
+    { name: "Descripción" },
+    { name: "Estado" },
+    { name: "Acciones" },
+  ];
 
+  // Datos de la tabla (tareas)
+  const data = tasks.map((task) => ({
+    Título: task.title,
+    Descripción: task.description,
+    Estado: task.completed ? "Completada" : "Pendiente",
+    Acciones: (
+      <>
+        <button onClick={() => handleEditTask(task)}>Ed</button>
+        <button onClick={() => handleDeleteTask(task.id)}>E</button>
+      </>
+    ),
+  }));
   return (
     <div>
       <div>
         <h2>{editingTaskId ? "Editar Tarea" : "Agregar Tarea"}</h2>
-        {error && <p style={{ color: "red" }}>{error}</p>}
         <input
           type="text"
           placeholder="Título"
@@ -207,20 +228,9 @@ const TaskList = () => {
         <button onClick={handleLogout}>Cerrar Sesión</button>
 
         <h2>Lista de Tareas</h2>
-        <ul>
-          {tasks.map((task) => (
-            <li key={task.id}>
-              <strong>{task.title}</strong> - {task.description} -{" "}
-              {task.completed ? "Completada" : "Pendiente"}
-              <button onClick={() => handleEditTask(task)}>Editar</button>
-              <button onClick={() => handleDeleteTask(task.id)}>
-                Eliminar
-              </button>
-            </li>
-          ))}
-        </ul>
       </div>
-        <Table></Table>
+
+      <Table headers={headers} data={data}></Table>
     </div>
   );
 };

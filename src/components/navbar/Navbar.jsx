@@ -43,7 +43,7 @@ function Navbar() {
         <img src="/publicDir/logo.png" alt="logo principal" className={logo} />
       </a>
       <ul>
-        {!isLoggedIn ? (
+        {isLoggedIn ? (
           <>
             <li>
               <NavLink className={registrar} to="/register">
