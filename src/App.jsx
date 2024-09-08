@@ -1,8 +1,8 @@
 import React, { lazy } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./components/Login/views/Login";
-import Register from "./components/Register/views/Register";
-import TaskList from "./components/TaskList/views/TaskList";
+import Login from "./app/Login/views/Login";
+import Register from "./app/Register/views/Register";
+import TaskList from "./app/TaskList/views/TaskList";
 const PublicLayout = lazy(() => import("./layout/public/Public"));
 function App() {
   return (

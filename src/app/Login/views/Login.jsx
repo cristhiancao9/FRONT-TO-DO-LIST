@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { notify, notifyError } from "../../../utils/notify";
-import Input from "../../Input/Input";
-import classes from "./Register.module.css";
-
+import Input from "../../../components/Input/Input";
+import classes from "./Login.module.css";
 const {
   contenedorRegistro,
   contenedorForm,
@@ -15,7 +13,7 @@ const {
   required,
   btnEnviar,
 } = classes;
-const Register = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,23 +25,22 @@ const Register = () => {
     setError("");
     setDisabledBtn(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
-      console.log("response", response);
+
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
-        notify(data?.message);
-        navigate("/public/login");
+        // Guardar el token en localStorage
+        localStorage.setItem("token", data.token);
+        navigate("/tasks");
         setDisabledBtn(false);
       } else {
-        const data = await response.json();
-        console.log("data", data);
-        notifyError(data?.message);
         setError(data.message);
         setDisabledBtn(false);
       }
@@ -54,8 +51,9 @@ const Register = () => {
   };
 
   return (
-    <div className={contenedorRegistro}>
-      <h2 className={titulo}>Sign Up</h2>
+    <div>
+      <h2>Login</h2>
+      {error && <p>{error}</p>}
       <form className={contenedorForm} onSubmit={handleSubmit}>
         <div className={contenedorInput}>
           <p className={`${nombreInput} && ${required}`}>e-mail</p>
@@ -100,11 +98,11 @@ const Register = () => {
           </div>
         </div>
         <button disabled={disabledBtn} className={btnEnviar} type="submit">
-          REGISTRAR
+          Iniciar sesión
         </button>
       </form>
     </div>
   );
 };
 
-export default Register;
+export default Login;

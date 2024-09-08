@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../../Input/Input";
-import classes from "./Login.module.css";
+import { notify, notifyError } from "../../../utils/notify";
+import Input from "../../../components/Input/Input";
+import classes from "./Register.module.css";
+
 const {
   contenedorRegistro,
   contenedorForm,
@@ -13,7 +15,7 @@ const {
   required,
   btnEnviar,
 } = classes;
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,22 +27,23 @@ const Login = () => {
     setError("");
     setDisabledBtn(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
-
-      const data = await response.json();
-
+      console.log("response", response);
       if (response.ok) {
-        // Guardar el token en localStorage
-        localStorage.setItem("token", data.token);
-        navigate("/tasks");
+        const data = await response.json();
+        notify(data?.message);
+        navigate("/public/login");
         setDisabledBtn(false);
       } else {
+        const data = await response.json();
+        console.log("data", data);
+        notifyError(data?.message);
         setError(data.message);
         setDisabledBtn(false);
       }
@@ -51,9 +54,8 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <p>{error}</p>}
+    <div className={contenedorRegistro}>
+      <h2 className={titulo}>Sign Up</h2>
       <form className={contenedorForm} onSubmit={handleSubmit}>
         <div className={contenedorInput}>
           <p className={`${nombreInput} && ${required}`}>e-mail</p>
@@ -98,11 +100,11 @@ const Login = () => {
           </div>
         </div>
         <button disabled={disabledBtn} className={btnEnviar} type="submit">
-          Iniciar sesión
+          REGISTRAR
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Register;
