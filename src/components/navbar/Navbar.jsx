@@ -11,6 +11,8 @@ const {
   cerrarSesion,
   iniciarSesion,
   registrar,
+  logo,
+  fixedNavbar,
 } = classes;
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,7 +30,7 @@ function Navbar() {
     navigate("/login");
   };
   return (
-    <nav className={isLoggedIn ? classes.fixedNavbar : ""}>
+    <nav className={isLoggedIn ? fixedNavbar : ""}>
       <input type="checkbox" id="check" className={checkBox} />
       <label htmlFor="check" className={checkbtn}>
         <div className={hamburger}>
@@ -38,10 +40,10 @@ function Navbar() {
         </div>
       </label>
       <a href="#" className={enlace}>
-        MEET GOALS
+        <img src="/publicDir/logo.png" alt="logo principal" className={logo} />
       </a>
       <ul>
-        {!isLoggedIn ? (
+        {isLoggedIn ? (
           <>
             <li>
               <NavLink className={registrar} to="/register">
