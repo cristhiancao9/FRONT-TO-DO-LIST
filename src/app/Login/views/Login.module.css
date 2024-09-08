@@ -1,20 +1,7 @@
-.contenedorRegistro {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--color-blanco);
-  padding: 50px;
-  border-radius: 20px;
-  margin-top: 170px;
-}
 .contenedorForm {
   display: flex;
   flex-direction: column;
   /* gap: 20px; */
-}
-.titulo {
-  font-size: x-large;
-  color: var(--color-primario);
 }
 .contenedorInput {
   display: flex;

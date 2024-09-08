@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Card from "../../../components/Card/views/Card";
 import Input from "../../../components/Input/Input";
+import { notify, notifyError } from "../../../utils/notify";
 import classes from "./Login.module.css";
+
 const {
-  contenedorRegistro,
   contenedorForm,
-  titulo,
   contenedorInput,
   nombreInput,
   contenedorSecundarioInput,
@@ -13,6 +14,7 @@ const {
   required,
   btnEnviar,
 } = classes;
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +26,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setDisabledBtn(true);
+
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -33,26 +36,42 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const data = await response.json(); 
+      console.log(data);
 
       if (response.ok) {
-        // Guardar el token en localStorage
         localStorage.setItem("token", data.token);
         navigate("/tasks");
-        setDisabledBtn(false);
+        fetchUserData();
       } else {
-        setError(data.message);
-        setDisabledBtn(false);
+        // Si el response no es ok, notificar el error que vino en el body
+        notifyError(data?.message || "Error desconocido");
+        setError(data.message || "Error desconocido");
       }
     } catch (error) {
+      // Aquí se maneja cualquier error, incluidos los errores de red
+      notifyError(error.message || "Error de red");
+      setError(error.message || "Error de red");
+    } finally {
       setDisabledBtn(false);
-      setError("Error de red");
     }
   };
 
+  const fetchUserData = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("http://localhost:5000/api/auth/user", {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const data = await response.json();
+    console.log("Datos del usuario:", data);
+  };
   return (
-    <div>
-      <h2>Login</h2>
+    <Card title="Login">
       {error && <p>{error}</p>}
       <form className={contenedorForm} onSubmit={handleSubmit}>
         <div className={contenedorInput}>
@@ -61,16 +80,13 @@ const Login = () => {
             <Input
               className={styleInput}
               value={email}
-              // autoComplete="none"
               name="email"
               id="email"
-              minLength={"9"}
+              minLength="9"
               maxLength="50"
               type="email"
               placeholder="e-mail"
               onChange={(e) => setEmail(e.target.value)}
-              onInvalid={(e) => e.target.setCustomValidity("Add e-mail")}
-              onInput={(e) => e.target.setCustomValidity("")}
               required
               title="Enter only valid email"
             />
@@ -82,26 +98,23 @@ const Login = () => {
             <Input
               className={styleInput}
               value={password}
-              // autoComplete="none"
               name="password"
               id="password"
-              minLength={"9"}
+              minLength="9"
               maxLength="15"
               type="password"
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
-              onInvalid={(e) => e.target.setCustomValidity("Add password")}
-              onInput={(e) => e.target.setCustomValidity("")}
               required
               title="Enter only valid password"
             />
           </div>
         </div>
         <button disabled={disabledBtn} className={btnEnviar} type="submit">
-          Iniciar sesión
+          Login
         </button>
       </form>
-    </div>
+    </Card>
   );
 };
 

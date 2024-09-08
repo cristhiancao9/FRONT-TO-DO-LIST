@@ -1,21 +1,9 @@
-.contenedorRegistro {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--color-blanco);
-  padding: 50px;
-  border-radius: 20px;
-  margin-top: 170px;
-}
 .contenedorForm {
   display: flex;
   flex-direction: column;
   /* gap: 20px; */
 }
-.titulo {
-  font-size: x-large;
-  color: var(--color-primario);
-}
+
 .contenedorInput {
   display: flex;
   flex-direction: column;
@@ -59,6 +47,14 @@
   content: "*";
   margin-left: 2px;
 }
+.contenedorBtns {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 20px;
+}
 .btnEnviar {
   display: flex;
   flex-direction: row;
@@ -100,6 +96,18 @@
   transform: scaleX(1);
 }
 @media (min-width: 894px) {
+  .contenedorForm {
+    display: grid;
+    column-gap: 30px;
+    grid-template-columns: auto auto;
+    width: 70%;
+    justify-content: center;
+    background: white;
+    padding-top: 20px;
+    border-radius: 30px 30px 30px 30px;
+    margin-bottom: 20px;
+    padding-bottom: 35px;
+  }
   .nombreInput {
     line-height: 20px;
   }
@@ -112,5 +120,11 @@
   }
   .styleInput {
     line-height: 20px;
+  }
+  .contenedorBtns {
+    justify-content: center;
+    align-items: center;
+    grid-column: span 2;
+    text-align: center;
   }
 }

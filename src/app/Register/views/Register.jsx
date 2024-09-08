@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { notify, notifyError } from "../../../utils/notify";
+import Card from "../../../components/Card/views/Card";
 import Input from "../../../components/Input/Input";
+import { notify, notifyError } from "../../../utils/notify";
 import classes from "./Register.module.css";
 
 const {
-  contenedorRegistro,
   contenedorForm,
-  titulo,
   contenedorInput,
   nombreInput,
   contenedorSecundarioInput,
   styleInput,
   required,
+  contenedorBtns,
   btnEnviar,
 } = classes;
+
 const Register = () => {
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,53 +29,86 @@ const Register = () => {
     e.preventDefault();
     setError("");
     setDisabledBtn(true);
+
     try {
       const response = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, lastName, email, password }),
       });
-      console.log("response", response);
+
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
-        notify(data?.message);
+        notify(data?.message || "Registro exitoso");
         navigate("/public/login");
-        setDisabledBtn(false);
       } else {
-        const data = await response.json();
-        console.log("data", data);
-        notifyError(data?.message);
-        setError(data.message);
-        setDisabledBtn(false);
+        notifyError(data?.message || "Error desconocido");
+        setError(data.message || "Error desconocido");
       }
     } catch (error) {
+      notifyError(error.message || "Error de red");
+      setError(error.message || "Error de red");
+    } finally {
       setDisabledBtn(false);
-      setError("Error de red");
     }
   };
 
+
   return (
-    <div className={contenedorRegistro}>
-      <h2 className={titulo}>Sign Up</h2>
+    <Card title="Sign Up">
       <form className={contenedorForm} onSubmit={handleSubmit}>
+        <div className={contenedorInput}>
+          <p className={`${nombreInput} && ${required}`}>Name</p>
+          <div className={contenedorSecundarioInput}>
+            <Input
+              className={styleInput}
+              value={name}
+              name="name"
+              id="name"
+              minLength="3"
+              maxLength="20"
+              type="text"
+              placeholder="name"
+              onChange={(e) => setName(e.target.value)}
+              required
+              title="Enter only valid name"
+            />
+          </div>
+        </div>
+        <div className={contenedorInput}>
+          <p className={`${nombreInput} && ${required}`}>last Name</p>
+          <div className={contenedorSecundarioInput}>
+            <Input
+              className={styleInput}
+              value={lastName}
+              name="lastName"
+              id="lastName"
+              minLength="3"
+              maxLength="20"
+              type="text"
+              placeholder="Last Name"
+              onChange={(e) => setLastName(e.target.value)}
+              required
+              title="Enter only valid lastName"
+            />
+          </div>
+        </div>
         <div className={contenedorInput}>
           <p className={`${nombreInput} && ${required}`}>e-mail</p>
           <div className={contenedorSecundarioInput}>
             <Input
               className={styleInput}
               value={email}
-              // autoComplete="none"
               name="email"
               id="email"
-              minLength={"9"}
+              minLength="9"
               maxLength="50"
               type="email"
               placeholder="e-mail"
               onChange={(e) => setEmail(e.target.value)}
-              onInvalid={(e) => e.target.setCustomValidity("Add e-mail")}
-              onInput={(e) => e.target.setCustomValidity("")}
               required
               title="Enter only valid email"
             />
@@ -84,26 +120,25 @@ const Register = () => {
             <Input
               className={styleInput}
               value={password}
-              // autoComplete="none"
               name="password"
               id="password"
-              minLength={"9"}
+              minLength="9"
               maxLength="15"
               type="password"
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
-              onInvalid={(e) => e.target.setCustomValidity("Add password")}
-              onInput={(e) => e.target.setCustomValidity("")}
               required
               title="Enter only valid password"
             />
           </div>
         </div>
-        <button disabled={disabledBtn} className={btnEnviar} type="submit">
-          REGISTRAR
-        </button>
+        <div className={contenedorBtns}>
+          <button disabled={disabledBtn} className={btnEnviar} type="submit">
+            Sign Up
+          </button>
+        </div>
       </form>
-    </div>
+    </Card>
   );
 };
 

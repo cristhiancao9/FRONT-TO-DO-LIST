@@ -11,3 +11,8 @@
   font-size: x-large;
   color: var(--color-primario);
 }
+@media (min-width: 894px) {
+  .contenedorRegistro {
+    margin-top: 100px;
+  }
+}
