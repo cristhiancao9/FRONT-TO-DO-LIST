@@ -8,44 +8,13 @@ const TaskList = () => {
   const [completed, setCompleted] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [error, setError] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para manejar el inicio de sesión
-
-  // Obtener las tareas cuando el componente se monta
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-
-  //   if (token) {
-  //     setIsLoggedIn(true); // Marcar como autenticado
-  //     // Realizar la solicitud para obtener las tareas
-  //     const fetchTasks = async () => {
-  //       try {
-  //         const response = await fetch("http://localhost:5000/api/tasks", {
-  //           headers: {
-  //             Authorization: token,
-  //           },
-  //         });
-  //         const data = await response.json();
-
-  //         if (Array.isArray(data)) {
-  //           setTasks(data); // Asigna directamente el array de tareas
-  //         } else {
-  //           setError(data?.msg);
-  //         }
-  //       } catch (error) {
-  //         setError("Error al cargar las tareas");
-  //       }
-  //     };
-
-  //     fetchTasks();
-  //   }
-  // }, []);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); //
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      setIsLoggedIn(true); // Marcar como autenticado
-      // Realizar la solicitud para obtener las tareas
+      setIsLoggedIn(true);
       const fetchTasks = async () => {
         try {
           const response = await fetch("http://localhost:5000/api/tasks", {
@@ -67,11 +36,9 @@ const TaskList = () => {
 
       fetchTasks();
     } else {
-      // Si no está autenticado, redirigir al componente de login
       navigate("/login");
     }
   }, [navigate]);
-  // Función para agregar una nueva tarea o editar una existente
   const handleAddOrEditTask = async () => {
     const token = localStorage.getItem("token");
 
@@ -168,7 +135,7 @@ const TaskList = () => {
     }
   };
 
-  // Función para cargar la tarea en el formulario de edición
+  // Función para cargar la tarea
   const handleEditTask = (task) => {
     setEditingTaskId(task.id);
     setTitle(task.title);
@@ -189,8 +156,8 @@ const TaskList = () => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.token); // Guardar el token en localStorage
-        setIsLoggedIn(true); // Marcar como autenticado
+        localStorage.setItem("token", data.token); 
+        setIsLoggedIn(true); 
         alert("Inicio de sesión exitoso");
       } else {
         alert("Credenciales incorrectas");
@@ -203,8 +170,8 @@ const TaskList = () => {
   // Función para cerrar sesión
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false); // Marcar como no autenticado
-    setTasks([]); // Limpiar las tareas
+    setIsLoggedIn(false); 
+    setTasks([]); 
     navigate("/login");
   };
 
