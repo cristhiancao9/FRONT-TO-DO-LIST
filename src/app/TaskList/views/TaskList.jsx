@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Table from "../../../components/Table/Table";
 const TaskList = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
@@ -156,8 +157,8 @@ const TaskList = () => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.token); 
-        setIsLoggedIn(true); 
+        localStorage.setItem("token", data.token);
+        setIsLoggedIn(true);
         alert("Inicio de sesión exitoso");
       } else {
         alert("Credenciales incorrectas");
@@ -170,8 +171,8 @@ const TaskList = () => {
   // Función para cerrar sesión
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false); 
-    setTasks([]); 
+    setIsLoggedIn(false);
+    setTasks([]);
     navigate("/login");
   };
 
@@ -219,6 +220,7 @@ const TaskList = () => {
           ))}
         </ul>
       </div>
+        <Table></Table>
     </div>
   );
 };
