@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import classes from "./Register.module.css";
 
+const { contenedorRegistro, contenedorForm, titulo } = classes;
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,10 +34,10 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h2>Registro</h2>
+    <div className={contenedorRegistro}>
+      <h2 className={titulo}>Sign Up</h2>
       {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <form className={contenedorForm} onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="Correo electrónico"

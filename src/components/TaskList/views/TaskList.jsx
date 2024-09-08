@@ -11,6 +11,35 @@ const TaskList = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para manejar el inicio de sesión
 
   // Obtener las tareas cuando el componente se monta
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+
+  //   if (token) {
+  //     setIsLoggedIn(true); // Marcar como autenticado
+  //     // Realizar la solicitud para obtener las tareas
+  //     const fetchTasks = async () => {
+  //       try {
+  //         const response = await fetch("http://localhost:5000/api/tasks", {
+  //           headers: {
+  //             Authorization: token,
+  //           },
+  //         });
+  //         const data = await response.json();
+
+  //         if (Array.isArray(data)) {
+  //           setTasks(data); // Asigna directamente el array de tareas
+  //         } else {
+  //           setError(data?.msg);
+  //         }
+  //       } catch (error) {
+  //         setError("Error al cargar las tareas");
+  //       }
+  //     };
+
+  //     fetchTasks();
+  //   }
+  // }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -37,9 +66,11 @@ const TaskList = () => {
       };
 
       fetchTasks();
+    } else {
+      // Si no está autenticado, redirigir al componente de login
+      navigate("/login");
     }
-  }, []);
-
+  }, [navigate]);
   // Función para agregar una nueva tarea o editar una existente
   const handleAddOrEditTask = async () => {
     const token = localStorage.getItem("token");
@@ -179,68 +210,48 @@ const TaskList = () => {
 
   return (
     <div>
-      {!isLoggedIn ? (
-        // Formulario de inicio de sesión
-        <div>
-          <h2>Iniciar Sesión</h2>
+      <div>
+        <h2>{editingTaskId ? "Editar Tarea" : "Agregar Tarea"}</h2>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <input
+          type="text"
+          placeholder="Título"
+          value={title || ""}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Descripción"
+          value={description || ""}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <label>
+          Completada:
           <input
-            type="text"
-            placeholder="Correo electrónico"
-            onChange={(e) => setTitle(e.target.value)}
+            type="checkbox"
+            checked={completed}
+            onChange={(e) => setCompleted(e.target.checked)}
           />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <button onClick={() => handleLogin(title, description)}>
-            Iniciar Sesión
-          </button>
-        </div>
-      ) : (
-        <div>
-          <h2>{editingTaskId ? "Editar Tarea" : "Agregar Tarea"}</h2>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <input
-            type="text"
-            placeholder="Título"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Descripción"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <label>
-            Completada:
-            <input
-              type="checkbox"
-              checked={completed}
-              onChange={(e) => setCompleted(e.target.checked)}
-            />
-          </label>
-          <button onClick={handleAddOrEditTask}>
-            {editingTaskId ? "Guardar Cambios" : "Agregar Tarea"}
-          </button>
-          <button onClick={handleLogout}>Cerrar Sesión</button>
+        </label>
+        <button onClick={handleAddOrEditTask}>
+          {editingTaskId ? "Guardar Cambios" : "Agregar Tarea"}
+        </button>
+        <button onClick={handleLogout}>Cerrar Sesión</button>
 
-          <h2>Lista de Tareas</h2>
-          <ul>
-            {tasks.map((task) => (
-              <li key={task.id}>
-                <strong>{task.title}</strong> - {task.description} -{" "}
-                {task.completed ? "Completada" : "Pendiente"}
-                <button onClick={() => handleEditTask(task)}>Editar</button>
-                <button onClick={() => handleDeleteTask(task.id)}>
-                  Eliminar
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        <h2>Lista de Tareas</h2>
+        <ul>
+          {tasks.map((task) => (
+            <li key={task.id}>
+              <strong>{task.title}</strong> - {task.description} -{" "}
+              {task.completed ? "Completada" : "Pendiente"}
+              <button onClick={() => handleEditTask(task)}>Editar</button>
+              <button onClick={() => handleDeleteTask(task.id)}>
+                Eliminar
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
