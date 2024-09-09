@@ -36,8 +36,8 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json(); 
-      console.log(data);
+      const data = await response.json();
+      // console.log(data);
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
@@ -68,14 +68,14 @@ const Login = () => {
     });
 
     const data = await response.json();
-    console.log("Datos del usuario:", data);
+    // console.log("Datos del usuario:", data);
   };
   return (
-    <Card title="Login">
+    <Card title="Iniciar Sesión">
       {error && <p>{error}</p>}
       <form className={contenedorForm} onSubmit={handleSubmit}>
         <div className={contenedorInput}>
-          <p className={`${nombreInput} && ${required}`}>e-mail</p>
+          <p className={`${nombreInput} && ${required}`}>Correo electrónico</p>
           <div className={contenedorSecundarioInput}>
             <Input
               className={styleInput}
@@ -85,15 +85,15 @@ const Login = () => {
               minLength="9"
               maxLength="50"
               type="email"
-              placeholder="e-mail"
+              placeholder="Correo electrónico"
               onChange={(e) => setEmail(e.target.value)}
               required
-              title="Enter only valid email"
+              title="Introduzca un correo electrónico válido"
             />
           </div>
         </div>
         <div className={contenedorInput}>
-          <p className={`${nombreInput} && ${required}`}>Password</p>
+          <p className={`${nombreInput} && ${required}`}>Contraseña</p>
           <div className={contenedorSecundarioInput}>
             <Input
               className={styleInput}
@@ -103,15 +103,15 @@ const Login = () => {
               minLength="9"
               maxLength="15"
               type="password"
-              placeholder="password"
+              placeholder="Contraseña"
               onChange={(e) => setPassword(e.target.value)}
               required
-              title="Enter only valid password"
+              title="Introduzca una contraseña válida"
             />
           </div>
         </div>
         <button disabled={disabledBtn} className={btnEnviar} type="submit">
-          Login
+          Iniciar Sesión
         </button>
       </form>
     </Card>

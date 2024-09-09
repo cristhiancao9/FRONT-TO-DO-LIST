@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import classes from "./NavBar.module.css";
 const {
   checkbtn,
@@ -13,21 +13,41 @@ const {
   registrar,
   logo,
   fixedNavbar,
+  nombreUser,
 } = classes;
 function Navbar() {
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState("");
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      fetchUserData();
       setIsLoggedIn(true);
     }
   }, []);
+  const fetchUserData = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("http://localhost:5000/api/auth/user", {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const data = await response.json();
+    setUser(
+      data?.name && data?.lastName ? `${data.name} ${data.lastName}` : "Usuario"
+    );
+    console.log("Datos del nav:", data);
+  };
   // Función para cerrar sesión
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false); // Marcar como no autenticado
-    setTasks([]); // Limpiar las tareas
-    navigate("/login");
+
+    navigate("/public/login");
   };
   return (
     <nav className={isLoggedIn ? fixedNavbar : fixedNavbar}>
@@ -39,31 +59,29 @@ function Navbar() {
           <div className={bar}></div>
         </div>
       </label>
-      <a href="#" className={enlace}>
+      <div className={enlace}>
         <img src="/publicDir/logo.png" alt="logo principal" className={logo} />
-      </a>
+        <label htmlFor=""> QuickTasks</label>
+      </div>
       <ul>
         {isLoggedIn ? (
           <>
+            <label className={nombreUser}>{user}</label>
             <li>
-              <NavLink className={registrar} to="/register">
-                Regístrate
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={iniciarSesion} to="/login">
-                Inicia sesión
-              </NavLink>
-            </li>
-          </>
-        ) : (
-          <li>
-            <div className={contenedorSesion}>
               <button className={cerrarSesion} onClick={() => handleLogout()}>
                 Cerrar sesíon
               </button>
-            </div>
-          </li>
+            </li>
+          </>
+        ) : (
+            ""
+          // <li>
+          //   <div className={contenedorSesion}>
+          //     <button className={cerrarSesion} onClick={() => handleLogout()}>
+          //       Cerrar sesíon
+          //     </button>
+          //   </div>
+          // </li>
         )}
       </ul>
     </nav>

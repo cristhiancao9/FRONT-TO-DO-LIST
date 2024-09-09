@@ -1,15 +1,22 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Navbar from "../../components/navbar/Navbar";
-
-const PrivateRoute = ({ children }) => {
+import classes from "./Private.module.css";
+const { contenedorPrincipalPrivate, contenedorOutlet } = classes;
+const PrivateRoute = () => {
   const token = localStorage.getItem("token");
 
   return (
-    <>
+    <div className={contenedorPrincipalPrivate}>
       <Navbar />
-      {token ? children : <Navigate to="/public/login" />}
-    </>
+      {token ? (
+        <div className={contenedorOutlet}>
+          <Outlet />
+        </div>
+      ) : (
+        <Navigate to="/public/login" />
+      )}
+    </div>
   );
 };
 

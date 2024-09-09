@@ -1,14 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../../../components/Card/views/Card";
+import Input from "../../../components/Input/Input";
 import Table from "../../../components/Table/Table";
 import classes from "./TaskList.module.css";
 
-const { contenedor } = classes;
+const {
+  contenedor,
+  contenedorForm,
+  contenedorInput,
+  nombreInput,
+  contenedorSecundarioInput,
+  styleInput,
+  required,
+  titulo,
+  btnEnviar,
+  btnEditar,
+  btnCancelar,
+} = classes;
 const TaskList = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
+  const [user, setUser] = useState("");
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
@@ -28,7 +42,7 @@ const TaskList = () => {
             },
           });
           const data = await response.json();
-
+          fetchUserData();
           if (Array.isArray(data)) {
             setTasks(data); // Asigna directamente el array de tareas
           } else {
@@ -44,7 +58,22 @@ const TaskList = () => {
       navigate("/login");
     }
   }, [navigate]);
-  const handleAddOrEditTask = async () => {
+  const fetchUserData = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("http://localhost:5000/api/auth/user", {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const data = await response.json();
+    // setUser(`${data?.name}${data?.lastName}`);
+    // console.log("Datos del usuario:", data);
+  };
+  const handleAddOrEditTask = async (e) => {
+    e.preventDefault();
     const token = localStorage.getItem("token");
 
     if (!title || !description) {
@@ -193,45 +222,84 @@ const TaskList = () => {
     Estado: task.completed ? "Completada" : "Pendiente",
     Acciones: (
       <>
-        <button onClick={() => handleEditTask(task)}>Ed</button>
-        <button onClick={() => handleDeleteTask(task.id)}>E</button>
+        <button
+          className={btnEditar}
+          onClick={() => handleEditTask(task)}
+        ></button>
+        <button
+          className={btnCancelar}
+          onClick={() => handleDeleteTask(task.id)}
+        ></button>
       </>
     ),
   }));
   return (
-    <div>
-      <div>
-        <h2>{editingTaskId ? "Editar Tarea" : "Agregar Tarea"}</h2>
-        <input
-          type="text"
-          placeholder="Título"
-          value={title || ""}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Descripción"
-          value={description || ""}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <label>
-          Completada:
-          <input
-            type="checkbox"
-            checked={completed}
-            onChange={(e) => setCompleted(e.target.checked)}
-          />
-        </label>
-        <button onClick={handleAddOrEditTask}>
-          {editingTaskId ? "Guardar Cambios" : "Agregar Tarea"}
-        </button>
-        <button onClick={handleLogout}>Cerrar Sesión</button>
+    <>
+      <div className={contenedor}>
+        <form onSubmit={handleAddOrEditTask} className={contenedorForm}>
+          <h2 className={titulo}>
+            {editingTaskId ? "Editar Tarea" : "Agregar Tarea"}
+          </h2>
+          <div className={contenedorInput}>
+            <label htmlFor="title" className={`${nombreInput} ${required}`}>
+              Título
+            </label>
+            <div className={contenedorSecundarioInput}>
+              <Input
+                className={styleInput}
+                value={title || ""}
+                name="title"
+                id="title"
+                minLength="1"
+                maxLength="50"
+                type="text"
+                placeholder="Título"
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+          <div className={contenedorInput}>
+            <label
+              htmlFor="Description"
+              className={`${nombreInput} ${required}`}
+            >
+              Descripción
+            </label>
+            <div className={contenedorSecundarioInput}>
+              <Input
+                className={styleInput}
+                value={description || ""}
+                name="Description"
+                id="Description"
+                minLength="1"
+                maxLength="50"
+                type="text"
+                placeholder="Descripción"
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </div>
+          </div>
 
-        <h2>Lista de Tareas</h2>
+          <label className={nombreInput}>
+            Tarea Completada:
+            <input
+              type="checkbox"
+              checked={completed}
+              onChange={(e) => setCompleted(e.target.checked)}
+            />
+          </label>
+          <button type="submit" className={btnEnviar}>
+            {editingTaskId ? "Guardar Cambios" : "Agregar Tarea"}
+          </button>
+        </form>
+        <div className={contenedorForm}>
+          <h2 className={titulo}>Lista de Tareas </h2>
+          <Table headers={headers} data={data}></Table>
+        </div>
       </div>
-
-      <Table headers={headers} data={data}></Table>
-    </div>
+    </>
   );
 };
 

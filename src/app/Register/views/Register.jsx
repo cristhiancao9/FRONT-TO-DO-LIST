@@ -56,48 +56,49 @@ const Register = () => {
     }
   };
 
-
   return (
-    <Card title="Sign Up">
+    <Card title="Registro de usuario">
       <form className={contenedorForm} onSubmit={handleSubmit}>
         <div className={contenedorInput}>
-          <p className={`${nombreInput} && ${required}`}>Name</p>
+          <p className={`${nombreInput} && ${required}`}>Nombres</p>
           <div className={contenedorSecundarioInput}>
             <Input
               className={styleInput}
+              autocomplete="none"
               value={name}
               name="name"
               id="name"
               minLength="3"
               maxLength="20"
               type="text"
-              placeholder="name"
+              placeholder="Nombres"
               onChange={(e) => setName(e.target.value)}
               required
-              title="Enter only valid name"
+              title="Introduzca un nombre válido"
             />
           </div>
         </div>
         <div className={contenedorInput}>
-          <p className={`${nombreInput} && ${required}`}>last Name</p>
+          <p className={`${nombreInput} && ${required}`}>Apellidos</p>
           <div className={contenedorSecundarioInput}>
             <Input
               className={styleInput}
               value={lastName}
+              autocomplete="none"
               name="lastName"
               id="lastName"
               minLength="3"
               maxLength="20"
               type="text"
-              placeholder="Last Name"
+              placeholder="Apellidos"
               onChange={(e) => setLastName(e.target.value)}
               required
-              title="Enter only valid lastName"
+              title="Introduzca un apellido válido"
             />
           </div>
         </div>
         <div className={contenedorInput}>
-          <p className={`${nombreInput} && ${required}`}>e-mail</p>
+          <p className={`${nombreInput} && ${required}`}>Correo electrónico</p>
           <div className={contenedorSecundarioInput}>
             <Input
               className={styleInput}
@@ -107,15 +108,15 @@ const Register = () => {
               minLength="9"
               maxLength="50"
               type="email"
-              placeholder="e-mail"
+              placeholder="Correo electrónico"
               onChange={(e) => setEmail(e.target.value)}
               required
-              title="Enter only valid email"
+              title="Introduzca un correo válido"
             />
           </div>
         </div>
         <div className={contenedorInput}>
-          <p className={`${nombreInput} && ${required}`}>Password</p>
+          <p className={`${nombreInput} && ${required}`}>Contraseña</p>
           <div className={contenedorSecundarioInput}>
             <Input
               className={styleInput}
@@ -125,16 +126,16 @@ const Register = () => {
               minLength="9"
               maxLength="15"
               type="password"
-              placeholder="password"
+              placeholder="Contraseña"
               onChange={(e) => setPassword(e.target.value)}
               required
-              title="Enter only valid password"
+              title="Introduzca una contraseña válida"
             />
           </div>
         </div>
         <div className={contenedorBtns}>
           <button disabled={disabledBtn} className={btnEnviar} type="submit">
-            Sign Up
+            Registrar
           </button>
         </div>
       </form>
