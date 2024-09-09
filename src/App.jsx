@@ -8,15 +8,9 @@ const PublicLayout = lazy(() => import("./layout/public/Public"));
 function App() {
   return (
     <Routes>
-      <Route
-        path="/tasks"
-        element={
-          <PrivateRoute>
-            <TaskList />
-          </PrivateRoute>
-        }
-      />
-      {/* <Route path="/tasks" element={<TaskList />} /> */}
+      <Route path="/" element={<PrivateRoute />}>
+        <Route path="tasks" element={<TaskList />} />
+      </Route>
       <Route path="/public" element={<PublicLayout />}>
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
