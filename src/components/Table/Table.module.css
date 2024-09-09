@@ -6,6 +6,11 @@
   max-width: 800px;
   color: var(--color-texto);
   background-color: #f9f9f9;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 15px;
+  overflow: hidden;
+  border:1px solid #dcf4ff
 }
 
 .header {
@@ -22,6 +27,7 @@
   text-align: center;
   font-weight: bold;
   white-space: nowrap;
+  border: none;
 }
 
 .header > tr > th > input,
@@ -46,8 +52,8 @@
 
 .content > tr > td {
   padding: 8px;
-  border: 1px solid #cccccc;
   background-color: #f9f9f9;
+  border: none;
 }
 
 .content > tr:hover {
@@ -168,14 +174,6 @@
 .tableStyle td,
 .tableStyle th {
   white-space: nowrap;
-}
-
-.tableContainer {
-  overflow-x: auto;
-  border-radius: 0 0 15px 15px;
-  overflow-y: auto;
-  max-height: 450px;
-  display: block;
 }
 
 .tableStyle td,

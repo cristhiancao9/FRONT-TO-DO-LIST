@@ -1,0 +1,18 @@
+.contenedorPrincipalPrivate {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.contenedorOutlet {
+  margin-top: 40px;
+  align-content: center;
+}
+@media (min-width: 894px) {
+  .contenedorOutlet {
+    margin-top: 40px;
+    /* display: flex;
+    align-items: center;
+    gap: 50px;
+    justify-content: space-evenly; */
+  }
+}

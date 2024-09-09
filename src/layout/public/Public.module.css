@@ -1,7 +1,6 @@
 .contenedorPrincipalPublic {
   display: flex;
   flex-direction: column;
-  /* background: var(--color-background); */
 }
 .contenedorOutlet {
   display: flex;

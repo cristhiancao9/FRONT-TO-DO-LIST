@@ -20,6 +20,11 @@ a {
 .enlace {
   position: absolute;
   padding: 10px 50px;
+  display: flex;
+  align-items: center;
+  color: var(--color-secundario);
+  font-weight: 600;
+  font-size: x-large;
 }
 .logo {
   height: 60px;
@@ -33,6 +38,9 @@ a {
 nav ul {
   float: right;
   margin-right: 20px;
+}
+.nombreUser {
+  color: var(--color-primario);
 }
 nav ul li {
   display: inline-block;
@@ -120,21 +128,17 @@ nav ul li span {
   font-weight: bold;
   margin-left: 4px;
   display: flex;
-  /* background: var(--color-primario); */
   border: 2px solid rgba(0, 149, 207, 1);
-  color: rgba(0, 149, 207, 1);
   align-items: center;
   justify-content: center;
   height: 30px;
   width: 100%;
   border-radius: 10px;
-  /* border: none; */
-  font-weight: 500;
   cursor: pointer;
   font-size: 17px;
-
   padding: 15px 7px;
-  /* margin-bottom: 25px; */
+  margin: 10px;
+  background: var(--color-blanco);
 }
 .cerrarSesion:hover {
   background: rgba(0, 149, 207, 1);
@@ -253,6 +257,14 @@ nav ul li span {
   }
   .logo {
     margin: 0px;
+  }
+  .enlace {
+    position: absolute;
+    padding: 10px 50px;
+    display: flex;
+    align-items: center;
+    color: var(--color-secundario);
+    font-weight: 600;
   }
 }
 /*termina navbar */
