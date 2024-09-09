@@ -6,7 +6,6 @@ import {
   editTask,
   deleteTask,
 } from "../../../features/tasks/tasksSlice";
-
 import { useNavigate } from "react-router-dom";
 import Input from "../../../components/Input/Input";
 import Table from "../../../components/Table/Table";
@@ -36,21 +35,24 @@ const TaskList = () => {
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const [filterCompleted, setFilterCompleted] = useState(""); // Nuevo estado para el filtro
 
+  // Ejecuta la consulta de tareas con el token y el filtro de estado
   useEffect(() => {
     if (!token) {
       navigate("/public/login");
     } else {
-      dispatch(fetchTasks(token));
+      dispatch(fetchTasks({ token, filterCompleted })); // Incluye el filtro en el fetchTasks
     }
-  }, [dispatch, token, navigate]);
+  }, [dispatch, token, filterCompleted, navigate]);
 
   const handleAddOrEditTask = (e) => {
     e.preventDefault();
+    const taskData = { title, description, completed };
     if (editingTaskId) {
-      dispatch(editTask({ id: editingTaskId, title, description, completed }));
+      dispatch(editTask({ token, taskId: editingTaskId, taskData }));
     } else {
-      dispatch(addTask({ title, description, completed }));
+      dispatch(addTask({ token, taskData }));
     }
     setTitle("");
     setDescription("");
@@ -59,7 +61,7 @@ const TaskList = () => {
   };
 
   const handleDeleteTask = (id) => {
-    dispatch(deleteTask(id));
+    dispatch(deleteTask({ token, taskId: id }));
   };
 
   const handleEditTask = (task) => {
@@ -69,10 +71,26 @@ const TaskList = () => {
     setCompleted(task.completed);
   };
 
+  const optionsEstado = [
+    { value: "", label: "Todos" },
+    { value: "true", label: "Completada" },
+    { value: "false", label: "Pendiente" },
+  ];
+
+  const handleFilterChange = (e) => {
+    setFilterCompleted(e.target.value);
+  };
   const headers = [
     { name: "Título" },
     { name: "Descripción" },
-    { name: "Estado" },
+    {
+      name: "Estado",
+      filter: {
+        type: "select",
+        options: optionsEstado,
+        onChange: (e) => setFilterCompleted(e.target.value), // Cambiar el estado del filtro
+      },
+    },
     { name: "Acciones" },
   ];
 
@@ -93,7 +111,7 @@ const TaskList = () => {
       </>
     ),
   }));
-  console.log("Estado de tareas en Redux:", tasks);
+
   return (
     <div className={contenedor}>
       <form onSubmit={handleAddOrEditTask} className={contenedorForm}>
@@ -148,7 +166,7 @@ const TaskList = () => {
       </form>
       <div className={contenedorForm}>
         <h2 className={titulo}>Lista de Tareas</h2>
-        <Table headers={headers} data={data} />
+        <Table headers={headers} data={data} onChange={handleFilterChange} />
         {loading && <p>Cargando tareas...</p>}
         {error && <p>{error}</p>}
       </div>
