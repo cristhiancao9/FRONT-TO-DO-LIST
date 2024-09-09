@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "../../../components/Card/views/Card";
 import Input from "../../../components/Input/Input";
 import classes from "./Register.module.css";
+import { notify } from "../../../utils/notify";
 
 const {
   contenedorForm,
@@ -36,7 +37,7 @@ const Register = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert("Registro exitoso");
+        notify(data.message);
         navigate("/public/login");
       } else {
         setError(data.message || "Error al registrarse");
