@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import Card from "../../../components/Card/views/Card";
 import Input from "../../../components/Input/Input";
-import { notify, notifyError } from "../../../utils/notify";
 import classes from "./Login.module.css";
 
 const {
@@ -16,60 +17,27 @@ const {
 } = classes;
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [disabledBtn, setDisabledBtn] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword]  = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setDisabledBtn(true);
-
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-      // console.log(data);
-
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
+      const actionResult = await dispatch(login({ email, password }));
+      if (login.fulfilled.match(actionResult)) {
         navigate("/tasks");
-        fetchUserData();
       } else {
-        // Si el response no es ok, notificar el error que vino en el body
-        notifyError(data?.message || "Error desconocido");
-        setError(data.message || "Error desconocido");
+        setError("Credenciales incorrectas");
       }
     } catch (error) {
-      // Aquí se maneja cualquier error, incluidos los errores de red
-      notifyError(error.message || "Error de red");
-      setError(error.message || "Error de red");
-    } finally {
-      setDisabledBtn(false);
+      setError("Error al iniciar sesión");
     }
   };
 
-  const fetchUserData = async () => {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch("http://localhost:5000/api/auth/user", {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    const data = await response.json();
-    // console.log("Datos del usuario:", data);
-  };
   return (
     <Card title="Iniciar Sesión">
       {error && <p>{error}</p>}
@@ -82,13 +50,10 @@ const Login = () => {
               value={email}
               name="email"
               id="email"
-              minLength="9"
-              maxLength="50"
               type="email"
               placeholder="Correo electrónico"
               onChange={(e) => setEmail(e.target.value)}
               required
-              title="Introduzca un correo electrónico válido"
             />
           </div>
         </div>
@@ -100,17 +65,14 @@ const Login = () => {
               value={password}
               name="password"
               id="password"
-              minLength="9"
-              maxLength="15"
               type="password"
               placeholder="Contraseña"
               onChange={(e) => setPassword(e.target.value)}
               required
-              title="Introduzca una contraseña válida"
             />
           </div>
         </div>
-        <button disabled={disabledBtn} className={btnEnviar} type="submit">
+        <button className={btnEnviar} type="submit">
           Iniciar Sesión
         </button>
       </form>
