@@ -53,7 +53,9 @@ const Register = () => {
       setDisabledBtn(false);
     }
   };
-
+  const handleLoginRedirect = () => {
+    navigate("/public/login");
+  };
   return (
     <Card title="Registro de usuario">
       {error && <p>{error}</p>}
@@ -69,7 +71,6 @@ const Register = () => {
               type="text"
               placeholder="Nombres"
               onChange={(e) => setName(e.target.value)}
-              autocomplete="none"
               minLength="3"
               maxLength="20"
               title="Introduzca un nombre válido"
@@ -88,7 +89,6 @@ const Register = () => {
               type="text"
               placeholder="Apellidos"
               onChange={(e) => setLastName(e.target.value)}
-              autocomplete="none"
               minLength="3"
               maxLength="20"
               title="Introduzca un apellido válido"
@@ -135,6 +135,13 @@ const Register = () => {
         <div className={contenedorBtns}>
           <button disabled={disabledBtn} className={btnEnviar} type="submit">
             Registrar
+          </button>
+          <button
+            disabled={disabledBtn}
+            className={btnEnviar}
+            onClick={handleLoginRedirect}
+          >
+            Iniciar sesión
           </button>
         </div>
       </form>

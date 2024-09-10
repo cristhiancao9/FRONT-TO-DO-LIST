@@ -20,7 +20,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword]  = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
@@ -37,7 +37,9 @@ const Login = () => {
       setError("Error al iniciar sesión");
     }
   };
-
+  const handleRegisterRedirect = () => {
+    navigate("/public/register");
+  };
   return (
     <Card title="Iniciar Sesión">
       {error && <p>{error}</p>}
@@ -74,6 +76,9 @@ const Login = () => {
         </div>
         <button className={btnEnviar} type="submit">
           Iniciar Sesión
+        </button>
+        <button className={btnEnviar} onClick={handleRegisterRedirect}>
+          Registrar
         </button>
       </form>
     </Card>
