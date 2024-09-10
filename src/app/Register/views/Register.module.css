@@ -49,9 +49,9 @@
 }
 .contenedorBtns {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   padding: 0px;
   gap: 20px;
 }
@@ -107,6 +107,7 @@
     border-radius: 30px 30px 30px 30px;
     margin-bottom: 20px;
     padding-bottom: 35px;
+    gap: 30px;
   }
   .nombreInput {
     line-height: 20px;
@@ -122,6 +123,7 @@
     line-height: 20px;
   }
   .contenedorBtns {
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     grid-column: span 2;

@@ -6,6 +6,32 @@
   padding: 50px;
   border-radius: 20px;
   margin-top: 170px;
+  position: relative;
+  border: 3px solid var(--color-primario) ;/* Borde rojo que se moverá */
+  animation: borderAnimation 8s infinite linear; /* Animación del borde */
+  padding: 20px;
+}
+@keyframes borderAnimation {
+  0% {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 0 var((--color-secundario));
+  }
+  25% {
+    box-shadow: 3px 0 0 0 var(--color-secundario),
+      -3px 0 0 0 var(--color-secundario);
+  }
+  50% {
+    box-shadow: 0 2px 0 0 var(--color-secundario),
+      0 -2px 0 0 var(--color-secundario);
+  }
+  75% {
+    box-shadow: -1px 0 0 0 var(--color-secundario),
+      1px 0 0 0 var(--color-secundario);
+  }
+  100% {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 0 var(--color-secundario);
+  }
 }
 .titulo {
   font-size: x-large;
