@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "../../../components/Card/views/Card";
 import Input from "../../../components/Input/Input";
 import classes from "./Register.module.css";
-import { notify } from "../../../utils/notify";
+import { notify, notifyError } from "../../../utils/notify";
 
 const {
   contenedorForm,
@@ -13,21 +13,24 @@ const {
   styleInput,
   required,
   btnEnviar,
+  contenedorBtns,
 } = classes;
-
+const API_URL = import.meta.env.VITE_API_URL;
 const Register = () => {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [disabledBtn, setDisabledBtn] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setDisabledBtn(true);
     setError("");
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,11 +42,15 @@ const Register = () => {
       if (response.ok) {
         notify(data.message);
         navigate("/public/login");
+        setDisabledBtn(false);
       } else {
+        notifyError(data.message);
         setError(data.message || "Error al registrarse");
+        setDisabledBtn(false);
       }
     } catch (error) {
       setError("Error al registrarse");
+      setDisabledBtn(false);
     }
   };
 
@@ -62,6 +69,10 @@ const Register = () => {
               type="text"
               placeholder="Nombres"
               onChange={(e) => setName(e.target.value)}
+              autocomplete="none"
+              minLength="3"
+              maxLength="20"
+              title="Introduzca un nombre válido"
               required
             />
           </div>
@@ -77,6 +88,10 @@ const Register = () => {
               type="text"
               placeholder="Apellidos"
               onChange={(e) => setLastName(e.target.value)}
+              autocomplete="none"
+              minLength="3"
+              maxLength="20"
+              title="Introduzca un apellido válido"
               required
             />
           </div>
@@ -92,6 +107,9 @@ const Register = () => {
               type="email"
               placeholder="Correo electrónico"
               onChange={(e) => setEmail(e.target.value)}
+              minLength="9"
+              maxLength="50"
+              title="Introduzca un correo válido"
               required
             />
           </div>
@@ -107,13 +125,18 @@ const Register = () => {
               type="password"
               placeholder="Contraseña"
               onChange={(e) => setPassword(e.target.value)}
+              minLength="9"
+              maxLength="15"
+              title="Introduzca una contraseña válida"
               required
             />
           </div>
         </div>
-        <button className={btnEnviar} type="submit">
-          Registrar
-        </button>
+        <div className={contenedorBtns}>
+          <button disabled={disabledBtn} className={btnEnviar} type="submit">
+            Registrar
+          </button>
+        </div>
       </form>
     </Card>
   );

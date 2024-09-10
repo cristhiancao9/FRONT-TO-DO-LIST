@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { notify } from "../../utils/notify";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
   async ({ token, filterCompleted }) => {
-    let url = "http://localhost:5000/api/tasks";
+    let url = `${API_URL}/tasks`;
     if (filterCompleted !== "") {
       url += `?completed=${filterCompleted}`;
     }
@@ -24,7 +25,7 @@ export const fetchTasks = createAsyncThunk(
 export const addTask = createAsyncThunk(
   "tasks/addTask",
   async ({ token, taskData }) => {
-    const response = await fetch("http://localhost:5000/api/tasks", {
+    const response = await fetch(`${API_URL}/tasks`, {
       method: "POST",
       headers: {
         Authorization: token,
@@ -34,8 +35,8 @@ export const addTask = createAsyncThunk(
     });
     const data = await response.json();
     notify(data.msg);
-    console.log("Nueva tarea creada:", data.obj)
-    return data.obj; 
+    console.log("Nueva tarea creada:", data.obj);
+    return data.obj;
   }
 );
 
@@ -43,7 +44,7 @@ export const addTask = createAsyncThunk(
 export const editTask = createAsyncThunk(
   "tasks/editTask",
   async ({ token, taskId, taskData }) => {
-    const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+    const response = await fetch(`${API_URL}/tasks/${taskId}`, {
       method: "PUT",
       headers: {
         Authorization: token,
@@ -61,7 +62,7 @@ export const editTask = createAsyncThunk(
 export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async ({ token, taskId }) => {
-    await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+    await fetch(`${API_URL}/tasks/${taskId}`, {
       method: "DELETE",
       headers: {
         Authorization: token,
