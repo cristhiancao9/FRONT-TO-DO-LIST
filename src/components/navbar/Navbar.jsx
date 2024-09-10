@@ -15,6 +15,7 @@ const {
   fixedNavbar,
   nombreUser,
 } = classes;
+const API_URL = import.meta.env.VITE_API_URL;
 function Navbar() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,7 +30,7 @@ function Navbar() {
   const fetchUserData = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://localhost:5000/api/auth/user", {
+    const response = await fetch(`${API_URL}/auth/user`, {
       method: "GET",
       headers: {
         Authorization: token,
@@ -40,7 +41,7 @@ function Navbar() {
     setUser(
       data?.name && data?.lastName ? `${data.name} ${data.lastName}` : "Usuario"
     );
-    console.log("Datos del nav:", data);
+    // console.log("Datos del nav:", data);
   };
   // Función para cerrar sesión
   const handleLogout = () => {
@@ -74,7 +75,7 @@ function Navbar() {
             </li>
           </>
         ) : (
-            ""
+          ""
           // <li>
           //   <div className={contenedorSesion}>
           //     <button className={cerrarSesion} onClick={() => handleLogout()}>
